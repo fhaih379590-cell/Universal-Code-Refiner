@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Data Refinery V2.5 | Cockpit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 1. 核心配色与字体 */
+        :root {
+            --bg-deep: #0d1117;
+            --bg-panel: #161b22;
+            --border-panel: #30363d;
+            --blue-glow: #58a6ff;
+            --green-glow: #3fb950;
+            --red-glow: #f85149;
+            --text-grey: #8b949e;
+            --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-deep);
+            color: #c9d1d9;
+            font-family: var(--font-mono);
+            height: 100vh;
+            overflow: hidden;
+            display: grid;
+            grid-template-areas: "nav head" "nav main" "nav foot";
+            grid-template-rows: 60px 1fr 120px;
+            grid-template-columns: 80px 1fr;
+        }
+
+        /* 2. 布局 - 侧边栏 */
+        nav.cockpit-nav {
+            grid-area: nav;
+            background-color: var(--bg-panel);
+            border-right: 1px solid var(--border-panel);
+            display: flex; flex-direction: column; align-items: center; padding-top: 15px; gap: 20px;
+        }
+        nav.cockpit-nav i { font-size: 20px; color: var(--text-grey); cursor: pointer; }
+        nav.cockpit-nav i.active { color: var(--blue-glow); text-shadow: 0 0 10px rgba(88, 166, 255, 0.5); }
+
+        /* 布局 - 头部 */
+        header.cockpit-header {
+            grid-area: head;
+            border-bottom: 1px solid var(--border-panel);
+            display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+        }
+        .main-title {
+            color: var(--blue-glow);
+            font-weight: 800; text-shadow: 0 0 10px rgba(88, 166, 255, 0.3); font-size: 1.5rem;
+        }
+
+        /* 3. 主界面布局 (3栏) */
+        main.cockpit-main {
+            grid-area: main;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .panel {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-panel);
+            border-radius: 8px;
+            flex: 1;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .panel-header {
+            padding: 10px 15px; border-bottom: 1px solid var(--border-panel);
+            display: flex; justify-content: space-between; font-weight: bold;
+        }
+        .panel-content { padding: 15px; flex: 1; overflow-y: auto; }
+
+        /* 特殊面板样式 */
+        #panel-data-flow { flex: 0.8; }
+        #panel-reasoning { flex: 1.2; }
+        #panel-output { flex: 1; }
+
+        /* 模拟代码块与日志 */
+        .log-box { font-size: 0.75rem; color: #8b949e; line-height: 1.6; }
+        .diff-added { color: var(--green-glow); background: rgba(63, 185, 80, 0.1); }
+        .diff-removed { color: var(--red-glow); background: rgba(248, 81, 73, 0.1); }
+
+        /* 布局 - 底部指标 */
+        footer.cockpit-foot {
+            grid-area: foot;
+            border-top: 1px solid var(--border-panel);
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+            background-color: var(--border-panel); /* 用于分割线效果 */
+        }
+        .metric { background-color: var(--bg-panel); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; }
+        .metric-title { font-size: 0.7rem; color: var(--text-grey); }
+        .metric-value { font-size: 1.2rem; font-weight: 800; color: var(--green-glow); }
+
+    </style>
+</head>
+<body>
+    <nav class="cockpit-nav">
+        <i class="fa fa-atom active"></i>
+        <i class="fa fa-network-wired"></i>
+        <i class="fa fa-folder"></i>
+        <i class="fa fa-terminal"></i>
+    </nav>
+
+    <header class="cockpit-header">
+        <div class="main-title">AI DATA REFINERY <span style="font-size:0.8rem;">V2026.04.28</span></div>
+        <div style="font-size:0.8rem; color:#8b949e;">Status: <i class="fa fa-circle" style="color:var(--green-glow); font-size:0.6rem;"></i> IDLE</div>
+    </header>
+
+    <main class="cockpit-main">
+        <div class="panel" id="panel-data-flow">
+            <div class="panel-header">PROJECT ASSETS / DATA STREAM <i class="fa fa-satellite-dish"></i></div>
+            <div class="panel-content">
+                <div style="font-weight:bold;">Repository / Source</div>
+                <div style="color:var(--blue-glow); margin-left:10px;">> backend-api (IDLE)</div>
+                <div style="color:var(--text-grey); margin-left:10px;">> universal-refiner (IDLE)</div>
+                
+                <hr style="border:0; border-top:1px solid #30363d; margin: 15px 0;">
+
+                <div style="font-weight:bold; color: var(--blue-glow);">Pipeline Queues</div>
+                <div style="color:#d19a66; margin-left:10px;">Testing... [0 files]</div>
+                <div style="color:#34a853; margin-left:10px;">Deployed... [14 commits]</div>
+            </div>
+        </div>
+
+        <div class="panel" id="panel-reasoning">
+            <div class="panel-header">AGENT THOUGHT CHAIN & STATUS <i class="fa fa-brain"></i></div>
+            <div class="panel-content log-box">
+                > 08:33:15: Deep scan 'Refiner pipeline' complete.<br>
+                > 08:33:16: [INFO] 0 potential flaws identified.<br>
+                > 08:33:17: Applying 'Refiner Style Guide'...<br>
+                > 08:33:18: Commit <a href="https://github.com/fhaih379590-cell/Universal-Code-Refiner/commit/main" target="_blank" style="color:var(--green-glow)">main</a>: Synced with refinery output.<br>
+                > 08:33:19: Agent Status: <span style="color:var(--green-glow)">DONE</span>.
+                
+                <hr style="border:0; border-top:1px solid #30363d; margin: 15px 0;">
+
+                <div style="color:#c9d1d9; font-weight:bold;">Refactoring Aggression Level</div>
+                <div style="margin-top:5px; height:6px; background:#161b22; border-radius:3px; position:relative;">
+                    <div style="width:20%; height:100%; background:var(--blue-glow); border-radius:3px;"></div>
+                    <div style="position:absolute; top:-3px; left:20%; width:12px; height:12px; background:#c9d1d9; border-radius:50%;"></div>
+                </div>
+                <div style="font-size:0.6rem; color: var(--text-grey);">Conservative | Aggressive</div>
+            </div>
+        </div>
+
+        <div class="panel" id="panel-output">
+            <div class="panel-header">REFINED RESULTS VIEW <i class="fa fa-diamond"></i></div>
+            <div class="panel-content log-box">
+                <a href="https://github.com/fhaih379590-cell/Universal-Code-Refiner/blob/main/data/output/test_code.py" target="_blank" style="color:var(--green-glow)">test_code.py</a>: Refinement details applied:<br>
+                
+                <div style="margin-left:10px;">
+                    <span class="diff-removed">- class legacy_processor:</span><br>
+                    <span class="diff-removed">- def __init__(self, data):</span><br>
+                    <span class="diff-added">+ def check_numbers(data_to_evaluate: List[int]) -> bool:</span><br>
+                    <span class="diff-added">+ """Refactored: Nested callbacks replaced with simple check."""</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="cockpit-foot">
+        <div class="metric">
+            <div class="metric-title">Critical Debts Found</div>
+            <div class="metric-value">0 <span style="font-size:0.7rem;">(-100%)</span></div>
+        </div>
+        <div class="metric">
+            <div class="metric-title">Daily Token Consumption</div>
+            <div class="metric-value" style="color:var(--blue-glow)">1.2M <span style="font-size:0.7rem;">(+142%)</span></div>
+        </div>
+        <div class="metric">
+            <div class="metric-title">Refactoring Confidence</div>
+            <div class="metric-value">99% ✅</div>
+        </div>
+        <div class="metric">
+            <div class="metric-title">Tests Passed / Sandbox</div>
+            <div class="metric-value">100% (120/120)</div>
+        </div>
+    </footer>
+</body>
+</html>
