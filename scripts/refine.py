@@ -2,8 +2,11 @@ import os, glob
 from openai import OpenAI
 
 # 初始化客户端
-client = OpenAI(api_key=os.getenv("LLM_API_KEY"))
-
+# client = OpenAI(api_key=os.getenv("LLM_API_KEY"))
+client = OpenAI(
+    base_url="https://models.inference.ai.azure.com", # 增加这一行
+    api_key=os.getenv("LLM_API_KEY")
+)
 def refine_all_languages():
     # 确保输出目录存在
     os.makedirs("data/output", exist_ok=True)
