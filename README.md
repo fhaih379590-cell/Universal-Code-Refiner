@@ -53,41 +53,15 @@ Universal-Code-Refiner/
 └── README.md             # 项目蓝图
 
 
-优化路线：
-🛠️ 第一阶段：工程效能增强 (The Power-Up)
-1. 自动单元测试验证 (Auto-Validation)
-重构代码最怕的是“逻辑变了”。
+## 🗺 进化路线图 (Evolution Roadmap)
 
-功能：Agent 在重构代码后，自动生成一段 pytest 或 unittest 代码，并在 GitHub Actions 的虚拟环境中运行。
-
-价值：如果测试不通过，Agent 自动标记该重构为“不可靠”，防止错误代码进入生产环境。
-
-2. 多模型“赛马”模式 (Model Arena)
-功能：在配置文件中允许设置多个 API Key（如 DeepSeek、OpenAI、MiMo）。
-
-价值：同一份代码发给三个模型，Agent 自动对比哪个模型的重构结果更简洁、注释更全，并选出最优解。
-
-🧠 第二阶段：AI 深度理解 (Intelligence Depth)
-3. RAG 知识库接入 (Domain-Specific Context)
-功能：在项目里放一个 docs/standard.md，写上你公司的代码规范。
-
-价值：Agent 重构时会先读取这个文档。比如你规定“所有变量必须用小驼峰”，Agent 就会严格执行，让重构结果完全符合你的个人偏好。
-
-4. 从代码到 SFT 数据集转化 (Data Synthesis)
-这是目前最前沿的方向，也是最容易拿大模型激励计划奖项的功能：
-
-功能：Agent 会把重构前后的差异（Diff）以及它自己的思考链（CoT）保存为 JSONL 格式。
-
-价值：这些数据可以直接喂给大模型进行微调，让下一个版本的模型学会像你一样写代码。
-
-🖥️ 第三阶段：UI 与交互进化 (UX Evolution)
-5. 动态实时日志流 (Live Streaming Logs)
-功能：利用 GitHub 的 API，把 Actions 运行时的实时控制台输出，“吸”到你的 GitHub Pages 驾驶舱里。
-
-价值：用户在网页上就能看到 Agent 正在一行行扫描代码，而不是只能看静态结果。
-
-6. 交互式重构确认 (Human-in-the-loop)
-功能：Agent 发现代码问题后，先在 GitHub 上提一个 Pull Request，并在评论区给出建议。
-
-价值：你只需在评论区回复“同意”或“再改改”，Agent 收到指令后再执行下一步。
+- [x] **v0.2 Beta**: 核心重构流水线与可视化驾驶舱。
+- [ ] **v0.5 (智能升级)**: 
+  - **集成验证器**: 自动运行 pytest 确保重构前后的逻辑等价。
+  - **隐私基因过滤**: 深度扫描并遮蔽泄露的 API Keys 和内网 IP。
+- [ ] **v0.8 (数据生产)**:
+  - **SFT 语料库生成**: 自动导出 (Raw -> Thought -> Refined) 三元组数据集。
+  - **RAG 规范接入**: 支持加载自定义 `.md` 规范文档。
+- [ ] **v1.0 (多 Agent 协作)**:
+  - 模拟 OpenClaw 的资源管理，引入“架构师-编码员-审计员”三位一体的 Agent 协作模式。
 
