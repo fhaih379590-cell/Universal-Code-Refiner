@@ -1,0 +1,26 @@
+name: Universal Code Refiner Agent
+on:
+  push:
+    paths: ['data/input/**']
+
+jobs:
+  refine-task:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with: { python-version: '3.10' }
+      - name: Install Dependencies
+        run: pip install openai
+      - name: Run Refiner
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+        run: python scripts/refine.py
+      - name: Push Results
+        run: |
+          git config --local user.email "bot@github.com"
+          git config --local user.name "Refine-Bot"
+          git add data/output/
+          git commit -m "Auto-refined new batch" || echo "No changes"
+          git push
