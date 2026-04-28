@@ -18,9 +18,10 @@ jobs:
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
         run: python scripts/refine.py
       - name: Push Results
-        run: |
-          git config --local user.email "bot@github.com"
-          git config --local user.name "Refine-Bot"
-          git add data/output/
-          git commit -m "Auto-refined new batch" || echo "No changes"
-          git push
+      run: |
+        git config --local user.email "bot@github.com"
+        git config --local user.name "Refine-Bot"
+        git pull --rebase origin main
+        git add data/output/
+        git commit -m "Auto-refined new batch" || echo "No changes"
+        git push origin main
