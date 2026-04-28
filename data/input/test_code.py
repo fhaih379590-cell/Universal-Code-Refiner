@@ -12,4 +12,4 @@ def check():
             print("odd")
     return True
 
-check()
+check() 
